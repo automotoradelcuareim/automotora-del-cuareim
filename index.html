@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reserva tu prueba de manejo gratuita con Automotora del Cuareim y encuentra el vehículo usado perfecto con confianza">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com https://www.youtube.com https://www.ytimg.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; frame-src 'self' https://www.youtube.com; img-src 'self' data: https://via.placeholder.com;">
     <title>Automotora del Cuareim - Reserva Tu Prueba Gratis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -584,7 +583,7 @@
             <div class="form-wrapper">
                 <div class="countdown-message">¡Últimos cupos disponibles hoy!</div>
                 <div class="countdown-timer" id="timer">⌛ 24:00:00</div>
-                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbx6qPMCJVn-asCWkrATIq1tC8QrrfSrqtJ6o6r4L5qhRPnHwv0YDRuuV9TXap2SOaU/exec" method="POST">
+                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzkcnXt9QckYpsC0icsrmZtBG6C7MUC9ZGO5uqnkdIRkpYOfqPaZ0ykslP6tYoDOM4/exec" method="POST">
                     <input type="text" name="nombre" placeholder="Nombre completo" required pattern="[A-Za-z\s]+" title="Solo letras y espacios">
                     <input type="tel" name="whatsapp" placeholder="Número WhatsApp" required pattern="\+?\d{9,15}" title="Ingresa un número válido (9-15 dígitos)">
                     <input type="text" name="vehicle" placeholder="Escribe el vehículo que deseas" required>
@@ -748,7 +747,6 @@
             }
 
             button.classList.add('loading');
-            // El formulario se enviará directamente al action, y Google Apps Script manejará la redirección
         });
     </script>
 </body>
