@@ -6,7 +6,7 @@
     <meta name="description" content="Reserva tu prueba de manejo gratuita con Automotora del Cuareim y encuentra el vehículo usado perfecto con confianza">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self' https://script.google.com https://www.youtube.com https://www.ytimg.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; frame-src 'self' https://www.youtube.com; img-src 'self' file: data: https://via.placeholder.com; connect-src 'self' https://script.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com https://www.youtube.com https://www.ytimg.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; frame-src 'self' https://www.youtube.com; img-src 'self' data: https://via.placeholder.com;">
     <title>Automotora del Cuareim - Reserva Tu Prueba Gratis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -162,7 +162,11 @@
             transform: translateY(-3px); 
             box-shadow: 0 6px 20px rgba(30, 55, 153, 0.3); 
         }
-        .btn.loading { opacity: 0.7; position: relative; }
+        .btn.loading { 
+            opacity: 0.7; 
+            position: relative; 
+            pointer-events: none;
+        }
         .btn.loading::after {
             content: '';
             position: absolute;
@@ -725,54 +729,26 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            const nombre = this.querySelector('input[name="nombre"]').value;
+            const whatsapp = this.querySelector('input[name="whatsapp"]').value;
             const button = this.querySelector('.btn');
-            button.classList.add('loading');
 
-            const formData = {
-                nombre: this.querySelector('input[name="nombre"]').value,
-                whatsapp: this.querySelector('input[name="whatsapp"]').value,
-                vehicle: this.querySelector('input[name="vehicle"]').value
-            };
-
-            if (!/^[A-Za-z\s]+$/.test(formData.nombre)) {
+            if (!/^[A-Za-z\s]+$/.test(nombre)) {
+                e.preventDefault();
                 alert('El nombre solo debe contener letras y espacios.');
                 button.classList.remove('loading');
                 return;
             }
-            if (!/^\+?\d{9,15}$/.test(formData.whatsapp)) {
+            if (!/^\+?\d{9,15}$/.test(whatsapp)) {
+                e.preventDefault();
                 alert('Por favor, ingresa un número de WhatsApp válido (9-15 dígitos).');
                 button.classList.remove('loading');
                 return;
             }
 
-            try {
-                console.log('Enviando datos:', formData);
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: JSON.stringify(formData),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                console.log('Respuesta del servidor:', data);
-                button.classList.remove('loading');
-
-                if (data.result === 'success') {
-                    window.location.href = '/automotora-del-cuareim/gracias.html';
-                } else {
-                    alert('Error: ' + (data.message || 'Respuesta inesperada del servidor'));
-                }
-            } catch (error) {
-                button.classList.remove('loading');
-                alert('Error al enviar: ' + error.message);
-                console.error('Detalles del error:', error);
-            }
+            button.classList.add('loading');
+            // El formulario se enviará directamente al action, y Google Apps Script manejará la redirección
         });
     </script>
 </body>
