@@ -706,47 +706,47 @@
     </div>
 
     <script>
-        let lastScroll = 0;
+        let ultimoScroll = 0;
         window.addEventListener('scroll', () => {
             const headerTop = document.querySelector('.header-top');
             const floatingCta = document.querySelector('.floating-cta');
-            const currentScroll = window.pageYOffset;
-            headerTop.classList.toggle('hidden', currentScroll > lastScroll && currentScroll > 100);
-            floatingCta.style.display = currentScroll > 200 ? 'block' : 'none';
-            lastScroll = currentScroll;
+            const scrollActual = window.pageYOffset;
+            headerTop.classList.toggle('hidden', scrollActual > ultimoScroll && scrollActual > 100);
+            floatingCta.style.display = scrollActual > 200 ? 'block' : 'none';
+            ultimoScroll = scrollActual;
         });
 
-        let timeLeft = 24 * 60 * 60;
-        const timerElement = document.getElementById('timer');
-        function updateTimer() {
-            const hours = Math.floor(timeLeft / 3600);
-            const minutes = Math.floor((timeLeft % 3600) / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `⌛ ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (timeLeft > 0) timeLeft--;
+        let tiempoRestante = 24 * 60 * 60;
+        const elementoTemporizador = document.getElementById('timer');
+        function actualizarTemporizador() {
+            const horas = Math.floor(tiempoRestante / 3600);
+            const minutos = Math.floor((tiempoRestante % 3600) / 60);
+            const segundos = tiempoRestante % 60;
+            elementoTemporizador.textContent = `⌛ ${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+            if (tiempoRestante > 0) tiempoRestante--;
         }
-        setInterval(updateTimer, 1000);
-        updateTimer();
+        setInterval(actualizarTemporizador, 1000);
+        actualizarTemporizador();
 
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
             const nombre = this.querySelector('input[name="nombre"]').value;
             const whatsapp = this.querySelector('input[name="whatsapp"]').value;
-            const button = this.querySelector('.btn');
+            const boton = this.querySelector('.btn');
 
             if (!/^[A-Za-z\s]+$/.test(nombre)) {
                 e.preventDefault();
                 alert('El nombre solo debe contener letras y espacios.');
-                button.classList.remove('loading');
+                boton.classList.remove('loading');
                 return;
             }
             if (!/^\+?\d{9,15}$/.test(whatsapp)) {
                 e.preventDefault();
                 alert('Por favor, ingresa un número de WhatsApp válido (9-15 dígitos).');
-                button.classList.remove('loading');
+                boton.classList.remove('loading');
                 return;
             }
 
-            button.classList.add('loading');
+            boton.classList.add('loading');
         });
     </script>
 </body>
