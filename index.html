@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reserva tu prueba de manejo gratuita con Automotora del Cuareim y encuentra el vehículo usado perfecto con confianza">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com https://www.youtube.com https://www.ytimg.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; frame-src 'self' https://www.youtube.com; img-src 'self' data: https://via.placeholder.com;">
     <title>Automotora del Cuareim - Reserva Tu Prueba Gratis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -410,7 +412,7 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05_sock);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             transition: all 0.4s ease;
             position: relative;
         }
@@ -581,9 +583,9 @@
             <div class="form-wrapper">
                 <div class="countdown-message">¡Últimos cupos disponibles hoy!</div>
                 <div class="countdown-timer" id="timer">⌛ 24:00:00</div>
-                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzw6jy5r7t5NnNebO01nKlvIqv8JZ0Bbkodcm0JLRFdBMs2gCf5HyLsKWDq-ak1FXA/exec" method="POST">
-                    <input type="text" name="nombre" placeholder="Nombre completo" required>
-                    <input type="tel" name="whatsapp" placeholder="Número WhatsApp" required>
+                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbxYvnNfptum4o6wOlRzQqlQPkTJ6nP4_lNA3ciphBBfTixFzW4I4dxtsOEolUIbb2w/exec" method="POST">
+                    <input type="text" name="nombre" placeholder="Nombre completo" required pattern="[A-Za-z\s]+" title="Solo letras y espacios">
+                    <input type="tel" name="whatsapp" placeholder="Número WhatsApp" required pattern="\+?\d{9,15}" title="Ingresa un número válido (9-15 dígitos)">
                     <input type="text" name="vehicle" placeholder="Escribe el vehículo que deseas" required>
                     <button class="btn" type="submit">Reservar Ahora</button>
                 </form>
@@ -696,7 +698,7 @@
     </div>
 
     <div class="floating-cta">
-        <a href="#appointmentForm" class="btn">¡Reserva Ya!</a>
+        <a href="#appointmentForm" class="btn" rel="noopener noreferrer">¡Reserva Ya!</a>
     </div>
 
     <div class="footer" id="contacto">
@@ -727,8 +729,42 @@
         actualizarTemporizador();
 
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevenir el envío por defecto
+
+            const nombre = this.querySelector('input[name="nombre"]').value;
+            const whatsapp = this.querySelector('input[name="whatsapp"]').value;
+            const vehicle = this.querySelector('input[name="vehicle"]').value;
             const boton = this.querySelector('.btn');
-            boton.classList.add('loading');
+
+            // Validaciones
+            if (!/^[A-Za-z\s]+$/.test(nombre)) {
+                alert('El nombre solo debe contener letras y espacios.');
+                boton.classList.remove('loading');
+                return;
+            }
+            if (!/^\+?\d{9,15}$/.test(whatsapp)) {
+                alert('Por favor, ingresa un número de WhatsApp válido (9-15 dígitos).');
+                boton.classList.remove('loading');
+                return;
+            }
+
+            boton.classList.add('loading'); // Activar estado de "cargando"
+
+            // Enviar datos al Google Apps Script
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                mode: 'no-cors' // Necesario para Google Apps Script
+            })
+            .then(() => {
+                // Redirigir a la página de agradecimiento
+                window.location.href = 'gracias.html'; // Ajusta la ruta si es necesario
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un problema al enviar el formulario. Intenta de nuevo.');
+                boton.classList.remove('loading');
+            });
         });
     </script>
 </body>
