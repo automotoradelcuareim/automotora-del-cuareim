@@ -212,7 +212,7 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: ิ่ง 0 8px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             transition: all 0.4s ease;
         }
         .feature-item:hover {
@@ -583,7 +583,7 @@
             <div class="form-wrapper">
                 <div class="countdown-message">¡Últimos cupos disponibles hoy!</div>
                 <div class="countdown-timer" id="timer">⌛ 24:00:00</div>
-                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzw6jy5r7t5NnNebO01nKlvIqv8JZ0Bbkodcm0JLRFdBMs2gCf5HyLsKWDq-ak1FXA/exec" method="POST">
+                <form id="appointmentForm" method="POST">
                     <input type="text" name="nombre" placeholder="Nombre completo" required pattern="[A-Za-z\s]+" title="Solo letras y espacios">
                     <input type="tel" name="whatsapp" placeholder="Número WhatsApp" required pattern="\+?\d{9,15}" title="Ingresa un número válido (9-15 dígitos)">
                     <input type="text" name="vehicle" placeholder="Escribe el vehículo que deseas" required>
@@ -729,24 +729,41 @@
         actualizarTemporizador();
 
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             const nombre = this.querySelector('input[name="nombre"]').value;
             const whatsapp = this.querySelector('input[name="whatsapp"]').value;
             const boton = this.querySelector('.btn');
 
             if (!/^[A-Za-z\s]+$/.test(nombre)) {
-                e.preventDefault();
                 alert('El nombre solo debe contener letras y espacios.');
                 boton.classList.remove('loading');
                 return;
             }
             if (!/^\+?\d{9,15}$/.test(whatsapp)) {
-                e.preventDefault();
                 alert('Por favor, ingresa un número de WhatsApp válido (9-15 dígitos).');
                 boton.classList.remove('loading');
                 return;
             }
 
             boton.classList.add('loading');
+
+            fetch('https://script.google.com/macros/s/AKfycbzw6jy5r7t5NnNebO01nKlvIqv8JZ0Bbkodcm0JLRFdBMs2gCf5HyLsKWDq-ak1FXA/exec', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                boton.classList.remove('loading');
+                if (data.success) {
+                    window.location.href = 'https://automotoradelcuareim.github.io/automotora-del-cuareim/gracias.html';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                boton.classList.remove('loading');
+                alert('Error al enviar el formulario: ' + error);
+            });
         });
     </script>
 </body>
