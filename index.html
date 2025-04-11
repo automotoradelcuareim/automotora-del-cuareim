@@ -574,7 +574,12 @@
     <div class="header" id="inicio">
         <div class="video-container">
             <div class="video-wrapper">
-                <iframe src="https://youtu.be/j8VZjoNnNxM" allowfullscreen></iframe>
+                <script>
+    document.addEventListener('click', function() {
+        const iframe = document.querySelector('.video-wrapper iframe');
+        iframe.src = iframe.src.replace('muted=1', 'muted=0'); // Cambia a sonido activado
+    }, { once: true }); // Se ejecuta solo una vez
+</script>
             </div>
         </div>
         <div class="form-container">
