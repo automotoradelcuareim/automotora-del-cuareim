@@ -90,6 +90,7 @@
             justify-content: space-between;
             background: rgba(0, 0, 0, 0.7);
             padding: 5px;
+            width: 100%;
         }
         .video-wrapper video::-webkit-media-controls-enclosure {
             overflow: hidden;
@@ -97,6 +98,7 @@
         .video-wrapper video::-webkit-media-controls-panel {
             display: flex;
             width: auto;
+            justify-content: space-between;
         }
         /* Ocultar controles no deseados en Webkit (Chrome, Safari) */
         .video-wrapper video::-webkit-media-controls-timeline,
@@ -605,7 +607,7 @@
     <div class="header" id="inicio">
         <div class="video-container">
             <div class="video-wrapper">
-                <video id="custom-video" autoplay controls>
+                <video id="custom-video" controls>
                     <source src="tu-video.mp4" type="video/mp4">
                     Tu navegador no soporta el elemento de video.
                 </video>
@@ -794,18 +796,6 @@
                 alert('Hubo un problema al enviar el formulario. Intenta de nuevo.');
                 boton.classList.remove('loading');
             });
-        });
-
-        // Forzar reproducción automática con audio para el video HTML5
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('custom-video');
-            if (video) {
-                video.play().catch(error => {
-                    console.error('Error al intentar reproducir automáticamente:', error);
-                    // Intentar reproducir nuevamente después de un pequeño retraso
-                    setTimeout(() => video.play(), 100);
-                });
-            }
         });
     </script>
 </body>
