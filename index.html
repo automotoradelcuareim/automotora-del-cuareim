@@ -574,7 +574,7 @@
     <div class="header" id="inicio">
         <div class="video-container">
             <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1012164807?autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0" allowfullscreen></iframe>
+                <iframe id="vimeo-video" src="https://player.vimeo.com/video/1012164807?autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0&background=0" allowfullscreen></iframe>
             </div>
         </div>
         <div class="form-container">
@@ -760,6 +760,19 @@
                 alert('Hubo un problema al enviar el formulario. Intenta de nuevo.');
                 boton.classList.remove('loading');
             });
+        });
+
+        // Intentar forzar reproducción automática con audio
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('vimeo-video');
+            if (video) {
+                video.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+                video.addEventListener('loadedmetadata', () => {
+                    video.play().catch(error => {
+                        console.error('Error al intentar reproducir automáticamente:', error);
+                    });
+                });
+            }
         });
     </script>
 </body>
