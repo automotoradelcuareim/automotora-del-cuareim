@@ -83,6 +83,13 @@
             height: 100%;
             border: none;
         }
+        /* Ocultar controles no deseados del reproductor de Vimeo */
+        .video-wrapper iframe {
+            pointer-events: auto; /* Permitir interacción con controles */
+        }
+        .video-wrapper iframe .vp-controls > *:not(.playbar):not(.volume) {
+            display: none !important; /* Intentar ocultar barra de progreso y otros controles */
+        }
         .form-container {
             width: 50%;
             max-width: 500px;
@@ -574,7 +581,7 @@
     <div class="header" id="inicio">
         <div class="video-container">
             <div class="video-wrapper">
-                <iframe id="vimeo-video" src="https://player.vimeo.com/video/1012164807?autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0&background=0" allowfullscreen></iframe>
+                <iframe id="vimeo-video" src="https://player.vimeo.com/video/1012164807?autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0&background=0&pip=0" allow="autoplay; fullscreen" allowfullscreen></iframe>
             </div>
         </div>
         <div class="form-container">
@@ -766,12 +773,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('vimeo-video');
             if (video) {
-                video.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-                video.addEventListener('loadedmetadata', () => {
-                    video.play().catch(error => {
-                        console.error('Error al intentar reproducir automáticamente:', error);
-                    });
-                });
+                video.setAttribute('allow', 'autoplay; fullscreen');
+                // Forzar reproducción automática
+                const playVideo = () => {
+                    video.contentWindow.postMessage('{"method":"play"}', 'https://player.vimeo.com');
+                };
+                video.addEventListener('load', playVideo);
+                // Intentar reproducir después de un pequeño retraso para evitar bloqueos
+                setTimeout(playVideo, 100);
             }
         });
     </script>
