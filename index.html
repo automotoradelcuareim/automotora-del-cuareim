@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reserva tu prueba de manejo gratuita con Automotora del Cuareim y encuentra el vehículo usado perfecto con confianza">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https://via.placeholder.com; connect-src 'self' https://script.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com https://player.vimeo.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https://via.placeholder.com; connect-src 'self' https://script.google.com; frame-src 'self' https://player.vimeo.com;">
     <title>Automotora del Cuareim - Reserva Tu Prueba Gratis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,46 +75,13 @@
             transition: transform 0.4s ease;
         }
         .video-wrapper:hover { transform: scale(1.02); }
-        .video-wrapper video {
+        .video-wrapper iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            object-fit: cover;
-        }
-        /* Personalizar controles del video */
-        .video-wrapper video::-webkit-media-controls {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px;
-            width: 100%;
-        }
-        .video-wrapper video::-webkit-media-controls-enclosure {
-            overflow: hidden;
-        }
-        .video-wrapper video::-webkit-media-controls-panel {
-            display: flex;
-            width: auto;
-            justify-content: space-between;
-        }
-        /* Ocultar controles no deseados en Webkit (Chrome, Safari) */
-        .video-wrapper video::-webkit-media-controls-timeline,
-        .video-wrapper video::-webkit-media-controls-current-time-display,
-        .video-wrapper video::-webkit-media-controls-time-remaining-display,
-        .video-wrapper video::-webkit-media-controls-fullscreen-button,
-        .video-wrapper video::-webkit-media-controls-mute-button {
-            display: none !important;
-        }
-        /* Firefox */
-        .video-wrapper video::-moz-media-controls {
-            display: flex;
-        }
-        .video-wrapper video::-moz-media-controls-timeline,
-        .video-wrapper video::-moz-media-controls-fullscreen-button {
-            display: none !important;
         }
         .form-container {
             width: 50%;
@@ -607,10 +574,7 @@
     <div class="header" id="inicio">
         <div class="video-container">
             <div class="video-wrapper">
-                <video id="custom-video" controls>
-                    <source src="tu-video.mp4" type="video/mp4">
-                    Tu navegador no soporta el elemento de video.
-                </video>
+                <iframe src="https://player.vimeo.com/video/1084731221?h=6c9c735a6c&autoplay=1&title=0&byline=0&portrait=0" width="100%" height="100%" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
         <div class="form-container">
@@ -760,14 +724,13 @@
         actualizarTemporizador();
 
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevenir el envío por defecto
+            e.preventDefault();
 
             const nombre = this.querySelector('input[name="nombre"]').value;
             const whatsapp = this.querySelector('input[name="whatsapp"]').value;
             const vehicle = this.querySelector('input[name="vehicle"]').value;
             const boton = this.querySelector('.btn');
 
-            // Validaciones
             if (!/^[A-Za-z\s]+$/.test(nombre)) {
                 alert('El nombre solo debe contener letras y espacios.');
                 boton.classList.remove('loading');
@@ -779,17 +742,15 @@
                 return;
             }
 
-            boton.classList.add('loading'); // Mostrar estado de carga
+            boton.classList.add('loading');
 
-            // Enviar datos al Google Apps Script
             fetch(this.action, {
                 method: 'POST',
                 body: new FormData(this),
-                mode: 'no-cors' // Necesario para Google Apps Script
+                mode: 'no-cors'
             })
             .then(() => {
-                // Redirigir a la página de agradecimiento
-                window.location.href = 'gracias.html'; // Ajusta la ruta si es necesario
+                window.location.href = 'gracias.html';
             })
             .catch(error => {
                 console.error('Error:', error);
